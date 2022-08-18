@@ -35,6 +35,7 @@ namespace Client
             });
             services.AddScoped<UserRepository>();
             services.AddScoped<ProjectRepository>();
+            services.AddScoped<CategoryRepository>();
             services.AddScoped<TaskRepository>();
             services.AddScoped<TaskUserRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

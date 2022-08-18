@@ -27,8 +27,8 @@ namespace API.Repositories.Data
         public List<TaskUser> Get()
         {
             var data = myContext.TB_M_TASKUSER
-                .Include(x => x.Task)
-                .ThenInclude(x => x.Project)
+                .Include(x => x.Task).ThenInclude(x => x.Category)
+                .Include(x => x.Task).ThenInclude(x => x.Project)
                 .ToList();
             return data;
         }

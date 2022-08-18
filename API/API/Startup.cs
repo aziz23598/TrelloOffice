@@ -47,6 +47,7 @@ namespace API
             services.AddScoped<UserRepository>();
             services.AddScoped<ProjectRepository>();
             services.AddScoped<TaskRepository>();
+            services.AddScoped<CategoryRepository>();
             services.AddScoped<TaskUserRepository>();
             services.AddSwaggerGen(c =>
             {

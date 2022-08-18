@@ -17,6 +17,12 @@ namespace Client.Models
         public Project Project { get; set; }
 
         [Required]
+        [ForeignKey("Category")]
+        [JsonPropertyName("CategoryId")]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+
+        [Required]
         [JsonPropertyName("Name")]
         public string Name { get; set; }
 

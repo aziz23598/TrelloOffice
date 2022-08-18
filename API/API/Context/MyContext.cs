@@ -16,5 +16,6 @@ namespace API.Context
         public DbSet<TaskUser> TB_M_TASKUSER { get; set; }
         public DbSet<Project> TB_M_PROJECT { get; set; }
         public DbSet<Task> TB_M_TASK { get; set; }
+        public DbSet<Category> TB_M_CATEGORY { get; set; }
     }
 }

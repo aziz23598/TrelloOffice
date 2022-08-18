@@ -12,7 +12,7 @@ $(document).ready(() => {
             },
             {
                 className: 'text-center',
-                targets: [0, 1, 2, 3, 4]
+                targets: [0, 1, 2, 3, 4, 5]
             },
         ],
         "ajax": {
@@ -32,6 +32,15 @@ $(document).ready(() => {
                 render: function (data, type, row, meta) {
                     return meta.row + 1;
                 }
+            },
+            {
+                "data": "task.category.Name",
+                render: function (data, type, row) {
+                    return row.task.category['Name'] == "Priority" ?
+                        `<span class='badge-lg badge-pill badge-danger'>${row.task.category['Name']}</span>` :
+                        `<span class='badge-lg badge-pill badge-info'>${row.task.category['Name']}</span>`;
+
+                },
             },
             {
                 "data": "task.Name"
@@ -394,6 +403,7 @@ function detailTask(id) {
         let obj = {};
         obj.TaskId = id;
         obj.ProjectId = result.data.ProjectId;
+        obj.CategoryId = result.data.CategoryId;
         obj.Name = result.data.Name;
         obj.Description = result.data.Description;
         obj.DueDate = result.data.DueDate;

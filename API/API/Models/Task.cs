@@ -16,6 +16,11 @@ namespace API.Models
         public Project Project { get; set; }
 
         [Required]
+        [ForeignKey("Category")]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         [Required]

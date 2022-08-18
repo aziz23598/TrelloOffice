@@ -272,6 +272,7 @@ function detailProject(id) {
         url: `https://localhost:44335/project/getjsonbyid/${id}`,
         type: 'get'
     }).done((result) => {
+        const category = {};
         let detailModalBody =
             `
             <div class="card">
@@ -307,6 +308,7 @@ function detailProject(id) {
             let projectId = [];
             let hashTaskProject = {};
             let hashTaskDoneProject = {};
+            const totalResult = result.data;
             for (let i = 0; i < result.data.length; i++) {
                 if (projectId.includes(result.data[i].ProjectId)) {
                     continue;
@@ -370,6 +372,8 @@ function detailProject(id) {
             $("#progressPercent").html(progressPercent);
             $("#progressBar").html(progressBar);
             let taskList = "";
+            console.log(result.data[0].category.Name);
+            let categoryId = [];
             for (let i = 0; i < result.data.length; i++) {
                 if (result.data[i].ProjectId == id) {
                     if (result.data[i].IsCompleted == true) {
@@ -420,6 +424,14 @@ function detailProject(id) {
                                         </div>
                                     </div>
                                     <div class="col mb-3">
+                                        <label class="form-control-label" for="CategoryId${i}">Category</label>
+                                        <select class="form-control" id="CategoryId${i}" required>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a valid supplier.
+                                        </div>
+                                    </div>
+                                    <div class="col mb-3">
                                         <label class="form-control-label" for="dueDateInput">Due Date</label>
                                         <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" 
                                             id="dueDateInput${i}" value="${result.data[i].DueDate}" required>
@@ -444,6 +456,7 @@ function detailProject(id) {
                             </div> 
                         </li>
                         `
+                        
                     }
                     if (result.data[i].IsCompleted == false) {
                         taskList +=
@@ -493,6 +506,14 @@ function detailProject(id) {
                                         </div>
                                     </div>
                                     <div class="col mb-3">
+                                        <label class="form-control-label" for="CategoryId${i}">Category</label>
+                                        <select class="form-control" id="CategoryId${i}" required>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a valid supplier.
+                                        </div>
+                                    </div>
+                                    <div class="col mb-3">
                                         <label class="form-control-label" for="dueDateInput">Due Date</label>
                                         <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" 
                                             id="dueDateInput${i}" value="${result.data[i].DueDate}" required>
@@ -517,11 +538,34 @@ function detailProject(id) {
                             </div> 
                         </li>
                         `
-                    }
-
+                    }   
                 }
-
+                    
             }
+            
+            for (let i = 0; i < result.data.length; i++) {
+                $.ajax({
+                    url: `https://localhost:44335/category/getjson`,
+                    type: 'get'
+                }).done((result) => {
+                    let option = "";
+                    option +=
+                    `
+                    <option selected value=${totalResult[i].category.CategoryId}>${totalResult[i].category.Name}</option>
+                    `
+                    $.each(result.data, (key, val) => {
+                        if (val.CategoryId != totalResult[i].category.CategoryId) {
+                            option +=
+                            `
+                            <option value=${val.CategoryId}>${val.Name}</option>
+                            `;
+                        }
+                    })
+                    $(`#CategoryId${i}`).html(option);
+                })
+            }
+
+            
 
             taskList +=
                 `
@@ -533,14 +577,18 @@ function detailProject(id) {
             for (let i = 0; i < result.data.length; i++) {
                 $(`#editTaskBtn${i}`).on('click', () => {
                     let obj = {};
+                    optionName = document.getElementById(`CategoryId${i}`);
+                    let categoryValue = optionName.options[optionName.selectedIndex].value;
                     obj.TaskId = parseInt($(`#taskId${i}`).val());
                     obj.ProjectId = result.data[id].ProjectId;
+                    obj.CategoryId = categoryValue;
                     obj.Name = $(`#taskName${i}`).val();
                     obj.Description = $(`#taskDescription${i}`).val();
                     let dueDates = new Date($(`#dueDateInput${i}`).val());
                     dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
                     obj.DueDate = dueDates;
                     obj.IsCompleted = false;
+                    console.log(obj);
                     $.ajax({
                         url: "https://localhost:44335/task/editjson",
                         type: "put",
@@ -679,6 +727,14 @@ function detailProject(id) {
                         </div>
                     </div>
                     <div class="col mb-3">
+                        <label class="form-control-label" for="CategoryId">Category</label>
+                            <select class="form-control" id="CategoryId" required>
+                            </select>
+                        <div class="invalid-feedback">
+                            Please select a valid supplier.
+                        </div>
+                    </div>
+                    <div class="col mb-3">
                         <label class="form-control-label" for="dueDateAddInput">Due Date</label>
                         <input class="form-control form-control-alternative" name="dueDateAddInput" placeholder="Select date" type="date" id="dueDateAddInput" required>
                         <div class="valid-feedback">
@@ -700,7 +756,24 @@ function detailProject(id) {
             
             `;
             $("#addTaskSection").html(addTaskSection);
-
+            $.ajax({
+                url: `https://localhost:44335/category/getjson`,
+                type: 'get'
+            }).done((result) => {
+                let option = "";
+                option +=
+                    `
+                    <option selected disabled value="">Choose Category..</option>
+                    `
+                $.each(result.data, (key, val) => {
+                    option +=
+                        `
+                    <option value=${val.CategoryId}>${val.Name}</option>
+                    `;
+                })
+                $("#CategoryId").html(option);
+            })
+            
         })
     });
 }
@@ -710,8 +783,11 @@ function addTask(id) {
         url: `https://localhost:44335/project/getjsonbyid/${id}`,
         type: 'get'
     }).done((result) => {
+        optionName = document.getElementById(`CategoryId`);
+        let categoryValue = optionName.options[optionName.selectedIndex].value;
         let obj = {};
         obj.ProjectId = result.data.ProjectId;
+        obj.CategoryId = categoryValue;
         obj.Name = $("#taskAddName").val();
         obj.Description = $("#taskAddDescription").val();
         let dueDates = new Date($('#dueDateAddInput').val());
@@ -754,6 +830,7 @@ function deleteTask(id) {
         let obj = {};
         obj.TaskId = result.data.TaskId;
         obj.ProjectId = result.data.ProjectId;
+        obj.CategoryId = result.data.CategoryId;
         obj.Name = result.data.Name;
         obj.Description = result.data.Description;
         obj.DueDate = result.data.DueDate;
