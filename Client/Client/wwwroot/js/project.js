@@ -304,7 +304,6 @@ function detailProject(id) {
             url: `https://localhost:44335/task/getjson`,
             type: 'get'
         }).done((result) => {
-            console.log(id);
             let projectId = [];
             let hashTaskProject = {};
             let hashTaskDoneProject = {};
@@ -542,7 +541,6 @@ function detailProject(id) {
                     dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
                     obj.DueDate = dueDates;
                     obj.IsCompleted = false;
-                    console.log(obj);
                     $.ajax({
                         url: "https://localhost:44335/task/editjson",
                         type: "put",
@@ -586,7 +584,6 @@ function detailProject(id) {
                             obj.Description = result.data[i].Description;
                             obj.DueDate = result.data[i].DueDate;
                             obj.IsCompleted = check;
-                            console.log(obj);
                             $.ajax({
                                 url: "https://localhost:44335/task/editjson",
                                 type: "put",
@@ -622,7 +619,6 @@ function detailProject(id) {
                             obj.Description = result.data[i].Description;
                             obj.DueDate = result.data[i].DueDate;
                             obj.IsCompleted = check;
-                            console.log(obj);
                             $.ajax({
                                 url: "https://localhost:44335/task/editjson",
                                 type: "put",
@@ -714,7 +710,6 @@ function addTask(id) {
         url: `https://localhost:44335/project/getjsonbyid/${id}`,
         type: 'get'
     }).done((result) => {
-        console.log(id);
         let obj = {};
         obj.ProjectId = result.data.ProjectId;
         obj.Name = $("#taskAddName").val();
@@ -723,7 +718,6 @@ function addTask(id) {
         dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
         obj.DueDate = dueDates;
         obj.IsCompleted = false;
-        console.log(obj);
         $.ajax({
             url: "https://localhost:44335/task/postjson",
             type: "post",
@@ -764,7 +758,6 @@ function deleteTask(id) {
         obj.Description = result.data.Description;
         obj.DueDate = result.data.DueDate;
         obj.IsCompleted = result.data.IsCompleted;
-        console.log(obj);
         swal({
             title: "Are you sure?",
             text: `You will delete Task : ${obj.Name}`,
@@ -872,7 +865,6 @@ function assignTask(id) {
                     let obj = {};
                     obj.TaskId = parseInt(id);
                     obj.UserId = parseInt(value);
-                    console.log(obj);
 
                     swal({
                         title: "Are you sure?",
@@ -925,6 +917,3 @@ function assignTask(id) {
         })
     })
 }
-
-
-console.log("This is Session User Id" + $("#sessionUserId").val());

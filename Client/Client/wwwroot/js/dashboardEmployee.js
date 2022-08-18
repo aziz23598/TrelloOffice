@@ -24,9 +24,6 @@ $.ajax({
     <span class="h2 font-weight-bold mb-0">${totalTaskDone}</span>
     `;
     $("#totalTaskDone").html(totalTaskDoneHTML);
-
-    // Data Bar 
-    console.log(result);
     let dueDate = [];
     let hashMap = {};
 

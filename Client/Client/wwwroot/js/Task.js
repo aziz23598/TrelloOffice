@@ -66,7 +66,6 @@ $(document).ready(() => {
         ]
     });
 })
-console.log($("#sessionUserId").val());
 
 function addTask() {
     let createModalBody =
@@ -429,14 +428,14 @@ function detailTask(id) {
                         $("#tableTask").DataTable().ajax.reload();
                         swal(
                             "Success",
-                            `${obj.name} has been saved`,
+                            `${obj.Name} has been changed`,
                             "success"
                         )
                     },
                     failure: () => {
                         swal(
                             "Internal Server Error",
-                            `Oops, ${obj.name} was not saved`,
+                            `Oops, ${obj.Name} was not saved`,
                             "error"
                         )
                     }

@@ -12,7 +12,6 @@ $.ajax({
 $.ajax({
     url: "https://localhost:44335/task/GetJSON"
 }).done((result) => {
-    console.log(result);
     let dueDate = [];
     let hashMap = {};
 
@@ -20,11 +19,6 @@ $.ajax({
     for (let i = 0; i < result.data.length; i++) {
         dueDate.push(result.data[i].DueDate)
     }
-
-    console.log(dueDate);
-    console.log("This is Due Date Length" + dueDate.length);
-    
-    
 
     //Pushing into HashMap
     for (let i = 0; i < dueDate.length; i++) {
@@ -38,7 +32,6 @@ $.ajax({
         }
         if (dueDate[i] in hashMap == false) {
             hashMap[dueDate[i]] = 1;
-            console.log("This is if 3");
         }
         
     }
@@ -51,8 +44,6 @@ $.ajax({
             backgroundClr.push('#f5365c');
         }
     }
-    console.log(backgroundClr);
-    console.log(hashMap);
 
     let dataBar = {
         labels: Object.keys(hashMap),
