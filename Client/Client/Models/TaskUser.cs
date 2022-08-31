@@ -10,7 +10,7 @@ namespace Client.Models
         [JsonPropertyName("TaskUserId")]
         public int TaskUserId { get; set; }
 
-        public Task Task { get; set; }
+        public TaskVM Task { get; set; }
         [Required]
         [ForeignKey("TaskId")]
         [JsonPropertyName("TaskId")]

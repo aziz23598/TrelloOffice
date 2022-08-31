@@ -2,6 +2,7 @@
 using Client.Repositories.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Client.Controllers
 {
@@ -22,70 +23,10 @@ namespace Client.Controllers
         }
         #endregion Get
 
-        #region Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Project project)
-        {
-            var result = projectRepository.Post(project);
-            if (result > 0)
-                return RedirectToAction("Index", "Project");
-            return View();
-        }
-        #endregion Create
-
-        #region Edit
-        public IActionResult Edit(int id)
-        {
-            var result = projectRepository.Get(id);
-            if (result != null)
-                return View(result);
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Project project)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = projectRepository.Put(project);
-                if (result > 0)
-                    return RedirectToAction("Index", "Project");
-            }
-            return View();
-        }
-        #endregion Edit
-
-        #region Delete
-        public IActionResult Delete(int id)
-        {
-            var result = projectRepository.Get(id);
-            if (result != null)
-                return View(result);
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(Project project)
-        {
-            var result = projectRepository.Delete(project);
-            if (result > 0)
-                return RedirectToAction("Index", "Project");
-            return View();
-        }
-        #endregion Delete
-
         #region GetJSON
-        public ActionResult GetJSON()
+        public async Task<ActionResult> GetJSON()
         {
-            var result = projectRepository.Get();
+            var result = await projectRepository.Get();
             if (result != null) return Ok(new
             {
                 status = 200,
@@ -120,9 +61,9 @@ namespace Client.Controllers
         #endregion
 
         #region GetJSONById
-        public ActionResult GetJSONById(int id)
+        public async Task<ActionResult> GetJSONById(int id)
         {
-            var result = projectRepository.Get(id);
+            var result = await projectRepository.Get(id);
             if (result != null) return Ok(new
             {
                 status = 200,

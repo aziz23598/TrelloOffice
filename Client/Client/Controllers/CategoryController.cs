@@ -1,6 +1,7 @@
 ﻿using Client.Models;
 using Client.Repositories.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Client.Controllers
 {
@@ -22,9 +23,9 @@ namespace Client.Controllers
         #endregion Get
 
         #region GetJSON
-        public ActionResult GetJSON()
+        public async Task<ActionResult> GetJSON()
         {
-            var result = categoryRepository.Get();
+            var result = await categoryRepository.Get();
             if (result != null) return Ok(new
             {
                 status = 200,
@@ -59,9 +60,9 @@ namespace Client.Controllers
         #endregion
 
         #region GetJSONById
-        public ActionResult GetJSONById(int id)
+        public async Task<ActionResult> GetJSONById(int id)
         {
-            var result = categoryRepository.Get(id);
+            var result = await categoryRepository.Get(id);
             if (result != null) return Ok(new
             {
                 status = 200,

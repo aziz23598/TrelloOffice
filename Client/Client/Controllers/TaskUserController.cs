@@ -2,6 +2,7 @@
 using Client.Repositories.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Client.Controllers
 {
@@ -18,77 +19,14 @@ namespace Client.Controllers
         #region Get
         public IActionResult Index()
         {
-            var result = taskUserRepository.Get();
-            if (result != null)
-                return View(result);
             return View();
         }
         #endregion Get
 
-        #region Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(TaskUser taskUser)
-        {
-            var result = taskUserRepository.Post(taskUser);
-            if (result > 0)
-                return RedirectToAction("Index", "TaskUser");
-            return View();
-        }
-        #endregion Create
-
-        #region Edit
-        public IActionResult Edit(int id)
-        {
-            var result = taskUserRepository.Get(id);
-            if (result != null)
-                return View(result);
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(TaskUser taskUser)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = taskUserRepository.Put(taskUser);
-                if (result > 0)
-                    return RedirectToAction("Index", "TaskUser");
-            }
-            return View();
-        }
-        #endregion Edit
-
-        #region Delete
-        public IActionResult Delete(int id)
-        {
-            var result = taskUserRepository.Get(id);
-            if (result != null)
-                return View(result);
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(TaskUser taskUser)
-        {
-            var result = taskUserRepository.Delete(taskUser);
-            if (result > 0)
-                return RedirectToAction("Index", "TaskUser");
-            return View();
-        }
-        #endregion Delete
-
         #region GetJSON
-        public ActionResult GetJSON()
+        public async Task<ActionResult> GetJSON()
         {
-            var result = taskUserRepository.Get();
+            var result = await taskUserRepository.Get();
             if (result != null) return Ok(new
             {
                 status = 200,
@@ -104,9 +42,9 @@ namespace Client.Controllers
         #endregion
 
         #region GetJSONId
-        public ActionResult GetJSONById(int id)
+        public async Task<ActionResult> GetJSONById(int id)
         {
-            var result = taskUserRepository.Get(id);
+            var result = await taskUserRepository.Get(id);
             if (result != null) return Ok(new
             {
                 status = 200,
@@ -120,6 +58,7 @@ namespace Client.Controllers
             });
         }
         #endregion GetJSONId
+
         #region PostJSON
         public ActionResult PostJSON(TaskUser taskUser)
         {

@@ -37,13 +37,13 @@ $(document).ready(() => {
 
                     return `
                                 <button type="button" onclick="detailProject(${row['ProjectId']})" data-toggle="modal" data-target="#detailProject" class="btn btn-success">
-                                    Details
+                                    <i class="fas fa-solid fa-file"></i>
                                 </button>
                                 <button type="button" onclick="editProject(${row['ProjectId']})" data-toggle="modal" data-target="#editProject" class="btn btn-warning">
-                                    Edit
+                                    <i class="fas fa-solid fa-pen"></i>
                                 </button>
                                 <button type="button" onclick="deleteProject(${row['ProjectId']})" class="btn btn-danger">
-                                    Delete
+                                    <i class="fas fa-solid fa-eraser"></i>
                                 </button>`
                 }
             }
@@ -290,10 +290,59 @@ function detailProject(id) {
             <div class="form" id="form-post">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="card-title"><i class='ni ni-check-bold'></i> Checklist Task</h2>
-                        <div class="col mb-3" id="taskList">
+                        <h2 class="card-title"><i class='ni ni-check-bold'></i> Checklist Task <button class='btn btn-primary' type="button" data-toggle="collapse" data-target="#collapseAddTask" aria-expanded="false" aria-controls="collapseAddTask"><i class='ni ni-fat-add'></i>Add Task</button></h2>
+                        <div class="mt-3">
+            <div class="collapse" id="collapseAddTask">
+            <div class="card card-body">
+                <div class="form" id="form-post">
+                    <div class="col mb-3">
+                        <label class="form-control-label" for="taskAddName">Task Name</label>
+                        <input name="taskAddName" type="text" class="form-control form-control-alternative"
+                            id="taskAddName" required>
+                        <div class="valid-feedback">
+                            Looks good!
                         </div>
-                        <div class="col mb-3" id="addTaskSection">
+                        <div class="invalid-feedback">
+                            Please Input Valid Project Name!
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-control-label" for="taskAddDescription">Task Description</label>
+                        <textarea class="form-control" id="taskAddDescription" aria-label="taskAddDescription" required></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please Input Valid Project Name!
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-control-label" for="CategoryId">Category</label>
+                            <select class="form-control" id="CategoryId" required>
+                            </select>
+                        <div class="invalid-feedback">
+                            Please select a valid supplier.
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-control-label" for="dueDateAddInput">Due Date</label>
+                        <input class="form-control form-control-alternative" name="dueDateAddInput" placeholder="Select date" type="date" id="dueDateAddInput" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please Input Valid Description!
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                    <button type="button" class="btn btn-primary" onclick="addTask(${id})">Submit Task</button>
+                    </div>
+                
+                </div>          
+            </div>
+        </div>
+            </div>
+                        <div class="col mb-3" id="taskList">
                         </div>
                     </div>
                 </div>
@@ -301,6 +350,23 @@ function detailProject(id) {
             </div>               
         `;
         $("#modalDetail").html(detailModalBody);
+        $.ajax({
+            url: `https://localhost:44335/category/getjson`,
+            type: 'get'
+        }).done((result) => {
+            let option = "";
+            option +=
+                `
+                <option selected disabled value="">Choose Category..</option>
+                `
+            $.each(result.data, (key, val) => {
+                option +=
+                    `
+                <option value=${val.CategoryId}>${val.Name}</option>
+                `;
+            })
+            $("#CategoryId").html(option);
+        })
         $.ajax({
             url: `https://localhost:44335/task/getjson`,
             type: 'get'
@@ -697,82 +763,7 @@ function detailProject(id) {
                 });
 
             }
-
-            let addTaskSection =
-                `
-            <button class='btn btn-primary' type="button" data-toggle="collapse" data-target="#collapseAddTask" aria-expanded="false" aria-controls="collapseAddTask"><i class='ni ni-fat-add'></i>Add Task</button>
-            <div class="mt-3">
-            <div class="collapse" id="collapseAddTask">
-            <div class="card card-body">
-                <div class="form" id="form-post">
-                    <div class="col mb-3">
-                        <label class="form-control-label" for="taskAddName">Task Name</label>
-                        <input name="taskAddName" type="text" class="form-control form-control-alternative"
-                            id="taskAddName" required>
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
-                        <div class="invalid-feedback">
-                            Please Input Valid Project Name!
-                        </div>
-                    </div>
-                    <div class="col mb-3">
-                        <label class="form-control-label" for="taskAddDescription">Task Description</label>
-                        <textarea class="form-control" id="taskAddDescription" aria-label="taskAddDescription" required></textarea>
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
-                        <div class="invalid-feedback">
-                            Please Input Valid Project Name!
-                        </div>
-                    </div>
-                    <div class="col mb-3">
-                        <label class="form-control-label" for="CategoryId">Category</label>
-                            <select class="form-control" id="CategoryId" required>
-                            </select>
-                        <div class="invalid-feedback">
-                            Please select a valid supplier.
-                        </div>
-                    </div>
-                    <div class="col mb-3">
-                        <label class="form-control-label" for="dueDateAddInput">Due Date</label>
-                        <input class="form-control form-control-alternative" name="dueDateAddInput" placeholder="Select date" type="date" id="dueDateAddInput" required>
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
-                        <div class="invalid-feedback">
-                            Please Input Valid Description!
-                        </div>
-                    </div>
-                    <div class="col mb-3">
-                    <button type="button" class="btn btn-primary" onclick="addTask(${id})">Submit Task</button>
-                    </div>
-                
-                </div>          
-            </div>
-        </div>
-            </div>
             
-            
-            `;
-            $("#addTaskSection").html(addTaskSection);
-            $.ajax({
-                url: `https://localhost:44335/category/getjson`,
-                type: 'get'
-            }).done((result) => {
-                let option = "";
-                option +=
-                    `
-                    <option selected disabled value="">Choose Category..</option>
-                    `
-                $.each(result.data, (key, val) => {
-                    option +=
-                        `
-                    <option value=${val.CategoryId}>${val.Name}</option>
-                    `;
-                })
-                $("#CategoryId").html(option);
-            })
             
         })
     });

@@ -1,6 +1,7 @@
 ﻿using Client.Repositories.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Client.Controllers
 {
@@ -15,9 +16,9 @@ namespace Client.Controllers
         }
 
         #region GetJSON
-        public ActionResult GetJSON()
+        public async Task<ActionResult> GetJSON()
         {
-            var result = userRepository.Get();
+            var result = await userRepository.Get();
             if (result != null) return Ok(new
             {
                 status = 200,

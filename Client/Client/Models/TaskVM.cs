@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Client.Models
 {
-    public class Task
+    public class TaskVM
     {
         [Key]
         [JsonPropertyName("TaskId")]

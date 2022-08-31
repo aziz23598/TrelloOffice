@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Client.Models.Task>
+﻿@model IEnumerable<Client.Models.TaskVM>
 
 	@{
 	Layout = "_LayoutDashboard";
@@ -9,8 +9,8 @@
 
 	<input type="hidden" value="@HttpContextAccessor.HttpContext.Session.GetString("UserId")" id="sessionUserId" />
 
-	<div class="container mt-3">
-		<div class="card">
+	<div class="container mt-6">
+		@* <div class="card">
 			<div class="card-body">
 				<h1 class="card-title text-center">Task List</h1>
 				<div class="table-responsive">
@@ -32,6 +32,31 @@
 						</table>
 					</div>
 				</div>
+			</div>
+		</div> *@
+		<div class="row" id="containerDOM">
+
+		</div>
+	</div>
+
+	<!-- ModalDetails -->
+	<div class="modal fade" id="detailTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Details</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				@Html.AntiForgeryToken()
+				<form class="detail-validation" novalidate>
+					<div class="modal-body" id="modalDetail">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
